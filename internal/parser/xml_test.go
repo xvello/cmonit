@@ -37,7 +37,7 @@ func TestParseMonitXML(t *testing.T) {
 	}
 
 	// Parse the XML
-	status, err := ParseMonitXML(data)
+	status, err := ParseMonitXML(data, true)
 	if err != nil {
 		t.Fatalf("Failed to parse XML: %v", err)
 	}

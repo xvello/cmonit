@@ -1032,7 +1032,7 @@ func handleCollector(w http.ResponseWriter, r *http.Request) {
 	// Returns:
 	//   - *MonitStatus: parsed data
 	//   - error: nil if successful, error describing problem if failed
-	status, err := parser.ParseMonitXML(body)
+	status, err := parser.ParseMonitXML(body, debugEnabled)
 	if err != nil {
 		// XML parsing failed
 		// This could mean:

@@ -10,13 +10,14 @@
 // 3. Use encoding/xml.Unmarshal() to parse XML bytes into the struct
 //
 // Example:
-//   XML: <person><name>Alice</name><age>30</age></person>
-//   Go struct:
-//     type Person struct {
-//         Name string `xml:"name"`
-//         Age  int    `xml:"age"`
-//     }
-//   Parse: xml.Unmarshal(xmlBytes, &person)
+//
+//	XML: <person><name>Alice</name><age>30</age></person>
+//	Go struct:
+//	  type Person struct {
+//	      Name string `xml:"name"`
+//	      Age  int    `xml:"age"`
+//	  }
+//	Parse: xml.Unmarshal(xmlBytes, &person)
 package parser
 
 import (
@@ -72,11 +73,13 @@ type MonitStatus struct {
 //
 // Example XML:
 // <server>
-//   <id>abc123...</id>
-//   <incarnation>1234567890</incarnation>
-//   <version>5.35.2</version>
-//   <hostname>web-server-01</hostname>
-//   ...
+//
+//	<id>abc123...</id>
+//	<incarnation>1234567890</incarnation>
+//	<version>5.35.2</version>
+//	<hostname>web-server-01</hostname>
+//	...
+//
 // </server>
 type Server struct {
 	// ID is a unique identifier for this Monit instance
@@ -126,9 +129,11 @@ type Server struct {
 //
 // Example XML:
 // <httpd>
-//   <address>::1</address>
-//   <port>2812</port>
-//   <ssl>0</ssl>
+//
+//	<address>::1</address>
+//	<port>2812</port>
+//	<ssl>0</ssl>
+//
 // </httpd>
 type HTTPDInfo struct {
 	// Address is the IP address Monit's HTTP server listens on
@@ -150,8 +155,10 @@ type HTTPDInfo struct {
 //
 // Example XML:
 // <credentials>
-//   <username>admin</username>
-//   <password>monit</password>
+//
+//	<username>admin</username>
+//	<password>monit</password>
+//
 // </credentials>
 type CredentialsInfo struct {
 	// Username for HTTP Basic Authentication
@@ -165,12 +172,14 @@ type CredentialsInfo struct {
 //
 // Example XML:
 // <platform>
-//   <name>FreeBSD</name>
-//   <release>16.0-CURRENT</release>
-//   <machine>amd64</machine>
-//   <cpu>64</cpu>
-//   <memory>268256896</memory>
-//   <swap>41943040</swap>
+//
+//	<name>FreeBSD</name>
+//	<release>16.0-CURRENT</release>
+//	<machine>amd64</machine>
+//	<cpu>64</cpu>
+//	<memory>268256896</memory>
+//	<swap>41943040</swap>
+//
 // </platform>
 type Platform struct {
 	// Name is the OS name (Linux, FreeBSD, Darwin/macOS, etc.)
@@ -211,10 +220,12 @@ type Platform struct {
 //
 // Example XML:
 // <service type="5">
-//   <name>bigone</name>
-//   <status>0</status>
-//   <monitor>1</monitor>
-//   <system>...</system>
+//
+//	<name>bigone</name>
+//	<status>0</status>
+//	<monitor>1</monitor>
+//	<system>...</system>
+//
 // </service>
 type Service struct {
 	// Type indicates what kind of service this is (0-8, see above)
@@ -311,17 +322,17 @@ type Service struct {
 
 	// Filesystem fields (for type 0 - filesystem services)
 	// These are directly in the <service> element, not nested
-	FSType   *string                   `xml:"fstype,omitempty"`
-	FSFlags  *string                   `xml:"fsflags,omitempty"`
-	FSMode   *string                   `xml:"mode,omitempty"`
-	Block    *FilesystemBlock          `xml:"block,omitempty"`
-	Inode    *FilesystemInode          `xml:"inode,omitempty"`
-	ReadIO   *FilesystemIO             `xml:"read,omitempty"`
-	WriteIO  *FilesystemIO             `xml:"write,omitempty"`
+	FSType  *string          `xml:"fstype,omitempty"`
+	FSFlags *string          `xml:"fsflags,omitempty"`
+	FSMode  *string          `xml:"mode,omitempty"`
+	Block   *FilesystemBlock `xml:"block,omitempty"`
+	Inode   *FilesystemInode `xml:"inode,omitempty"`
+	ReadIO  *FilesystemIO    `xml:"read,omitempty"`
+	WriteIO *FilesystemIO    `xml:"write,omitempty"`
 
 	// Network fields (for type 8 - network interface services)
 	// Only present when Type == 8 (network interface)
-	Link     *NetworkLink              `xml:"link,omitempty"`
+	Link *NetworkLink `xml:"link,omitempty"`
 
 	// Remote Host monitoring fields (for type 4 - remote host services)
 	// ICMP contains ping monitoring information
@@ -344,10 +355,12 @@ type Service struct {
 //
 // Example XML:
 // <system>
-//   <load><avg01>0.20</avg01><avg05>0.32</avg05><avg15>0.28</avg15></load>
-//   <cpu><user>5.2</user><system>2.1</system><nice>0.0</nice></cpu>
-//   <memory><percent>45.6</percent><kilobyte>12345678</kilobyte></memory>
-//   <swap><percent>10.0</percent><kilobyte>1234567</kilobyte></swap>
+//
+//	<load><avg01>0.20</avg01><avg05>0.32</avg05><avg15>0.28</avg15></load>
+//	<cpu><user>5.2</user><system>2.1</system><nice>0.0</nice></cpu>
+//	<memory><percent>45.6</percent><kilobyte>12345678</kilobyte></memory>
+//	<swap><percent>10.0</percent><kilobyte>1234567</kilobyte></swap>
+//
 // </system>
 type SystemMetrics struct {
 	// Load contains load average information
@@ -538,9 +551,11 @@ type ProcessCPU struct {
 //
 // Example XML:
 // <program>
-//   <started>1234567890</started>
-//   <status>0</status>
-//   <output><![CDATA[Everything OK]]></output>
+//
+//	<started>1234567890</started>
+//	<status>0</status>
+//	<output><![CDATA[Everything OK]]></output>
+//
 // </program>
 type ProgramInfo struct {
 	// Started is Unix timestamp when the program was last run
@@ -568,9 +583,11 @@ type ProgramInfo struct {
 // <size>12345</size>
 // <hardlink>1</hardlink>
 // <timestamps>
-//   <access>1763943569</access>
-//   <change>1763943568</change>
-//   <modify>1763943568</modify>
+//
+//	<access>1763943569</access>
+//	<change>1763943568</change>
+//	<modify>1763943568</modify>
+//
 // </timestamps>
 // <checksum type="MD5">abc123...</checksum>
 type FileInfo struct {
@@ -604,8 +621,10 @@ type FileInfo struct {
 //
 // Example XML:
 // <icmp>
-//   <type>echo</type>
-//   <responsetime>0.001</responsetime>
+//
+//	<type>echo</type>
+//	<responsetime>0.001</responsetime>
+//
 // </icmp>
 type ICMPInfo struct {
 	// Type is the ICMP check type (usually "echo" for ping)
@@ -623,12 +642,14 @@ type ICMPInfo struct {
 //
 // Example XML:
 // <port>
-//   <hostname>192.168.100.10</hostname>
-//   <portnumber>8123</portnumber>
-//   <request/>
-//   <protocol>HTTP</protocol>
-//   <type>TCP</type>
-//   <responsetime>0.002</responsetime>
+//
+//	<hostname>192.168.100.10</hostname>
+//	<portnumber>8123</portnumber>
+//	<request/>
+//	<protocol>HTTP</protocol>
+//	<type>TCP</type>
+//	<responsetime>0.002</responsetime>
+//
 // </port>
 type PortInfo struct {
 	// Hostname is the target hostname or IP address
@@ -653,9 +674,11 @@ type PortInfo struct {
 //
 // Example XML:
 // <unix>
-//   <path>/var/run/syslog.sock</path>
-//   <protocol>DEFAULT</protocol>
-//   <responsetime>0.000</responsetime>
+//
+//	<path>/var/run/syslog.sock</path>
+//	<protocol>DEFAULT</protocol>
+//	<responsetime>0.000</responsetime>
+//
 // </unix>
 type UnixSocketInfo struct {
 	// Path is the filesystem path to the Unix socket
@@ -772,11 +795,13 @@ type FilesystemOperations struct {
 //
 // Example XML:
 // <link>
-//   <state>1</state>
-//   <speed>1000000000</speed>
-//   <duplex>1</duplex>
-//   <download>...</download>
-//   <upload>...</upload>
+//
+//	<state>1</state>
+//	<speed>1000000000</speed>
+//	<duplex>1</duplex>
+//	<download>...</download>
+//	<upload>...</upload>
+//
 // </link>
 type NetworkLink struct {
 	// State indicates link status
@@ -875,6 +900,7 @@ func (s *Service) StatusMessage() string {
 		return fmt.Sprintf("Unknown status (%d)", s.Status)
 	}
 }
+
 // ========================================================================
 // XML Proxy Structs - Mirror Monit's flat XML structure
 // ========================================================================
@@ -886,8 +912,8 @@ func (s *Service) StatusMessage() string {
 // then ToService() converts them to the correct nested structure based on Type.
 type ServiceXML struct {
 	// Common fields (all service types)
-	Type          int    `xml:"type"`          // Element: <type>5</type>
-	Name          string `xml:"name,attr"`     // Attribute: <service name="bigone">
+	Type          int    `xml:"type"`      // Element: <type>5</type>
+	Name          string `xml:"name,attr"` // Attribute: <service name="bigone">
 	CollectedSec  int64  `xml:"collected_sec"`
 	CollectedUsec int64  `xml:"collected_usec"`
 	Status        int    `xml:"status"`
@@ -899,23 +925,23 @@ type ServiceXML struct {
 
 	// Flat fields used by file (type 2), filesystem (type 0), and process (type 3)
 	// These conflict - same XML tags used for different purposes
-	Mode      *string `xml:"mode,omitempty"`       // File/filesystem mode
-	UID       *int    `xml:"uid,omitempty"`        // File/filesystem/process UID
-	GID       *int    `xml:"gid,omitempty"`        // File/filesystem/process GID
-	Size      *int64  `xml:"size,omitempty"`       // File size
-	Hardlink  *int    `xml:"hardlink,omitempty"`   // File hardlink count
+	Mode     *string `xml:"mode,omitempty"`     // File/filesystem mode
+	UID      *int    `xml:"uid,omitempty"`      // File/filesystem/process UID
+	GID      *int    `xml:"gid,omitempty"`      // File/filesystem/process GID
+	Size     *int64  `xml:"size,omitempty"`     // File size
+	Hardlink *int    `xml:"hardlink,omitempty"` // File hardlink count
 
 	// File-specific nested fields (checksum and timestamps need special handling)
 	Timestamps *FileTimestamps `xml:"timestamps,omitempty"` // File timestamps
 	Checksum   *FileChecksum   `xml:"checksum,omitempty"`   // File checksum
 
 	// Filesystem-specific fields
-	FSType   *string           `xml:"fstype,omitempty"`  // Filesystem type
-	FSFlags  *string           `xml:"fsflags,omitempty"` // Filesystem flags
-	Block    *FilesystemBlock  `xml:"block,omitempty"`   // Filesystem blocks
-	Inode    *FilesystemInode  `xml:"inode,omitempty"`   // Filesystem inodes
-	ReadIO   *FilesystemIO     `xml:"read,omitempty"`    // Filesystem read IO
-	WriteIO  *FilesystemIO     `xml:"write,omitempty"`   // Filesystem write IO
+	FSType  *string          `xml:"fstype,omitempty"`  // Filesystem type
+	FSFlags *string          `xml:"fsflags,omitempty"` // Filesystem flags
+	Block   *FilesystemBlock `xml:"block,omitempty"`   // Filesystem blocks
+	Inode   *FilesystemInode `xml:"inode,omitempty"`   // Filesystem inodes
+	ReadIO  *FilesystemIO    `xml:"read,omitempty"`    // Filesystem read IO
+	WriteIO *FilesystemIO    `xml:"write,omitempty"`   // Filesystem write IO
 
 	// Process-specific fields
 	PID      *int           `xml:"pid,omitempty"`
@@ -934,9 +960,9 @@ type ServiceXML struct {
 	Link    *NetworkLink   `xml:"link,omitempty"`
 
 	// Remote host monitoring fields (for type 4 and type 3 with checks)
-	ICMP    *ICMPInfo        `xml:"icmp,omitempty"`
-	Port    *PortInfo        `xml:"port,omitempty"`
-	Unix    *UnixSocketInfo  `xml:"unix,omitempty"`
+	ICMP *ICMPInfo       `xml:"icmp,omitempty"`
+	Port *PortInfo       `xml:"port,omitempty"`
+	Unix *UnixSocketInfo `xml:"unix,omitempty"`
 }
 
 // ToService converts the flat ServiceXML to the domain Service struct.
@@ -1043,20 +1069,22 @@ func getFileChecksum(p *FileChecksum) FileChecksum {
 // It uses ServiceXML instead of Service to handle the flat XML structure.
 //
 // The Monit collector API sends XML with attributes on the <monit> element:
-//   <monit id="..." incarnation="..." version="...">
+//
+//	<monit id="..." incarnation="..." version="...">
+//
 // while the HTTP API (?format=xml) sends them as nested elements in <server>.
 // We handle both formats by accepting them as optional attributes.
 type MonitStatusXML struct {
-	XMLName     xml.Name     `xml:"monit"`
-	ID          string       `xml:"id,attr,omitempty"`          // Optional: collector format
-	Incarnation string       `xml:"incarnation,attr,omitempty"` // Optional: collector format
-	Version     string       `xml:"version,attr,omitempty"`     // Optional: collector format
-	Server      Server       `xml:"server"`
-	Platform    Platform     `xml:"platform"`
+	XMLName         xml.Name `xml:"monit"`
+	ID              string   `xml:"id,attr,omitempty"`          // Optional: collector format
+	Incarnation     string   `xml:"incarnation,attr,omitempty"` // Optional: collector format
+	Version         string   `xml:"version,attr,omitempty"`     // Optional: collector format
+	Server          Server   `xml:"server"`
+	Platform        Platform `xml:"platform"`
 	ServicesWrapper struct {
 		Services []ServiceXML `xml:"service"`
-	} `xml:"services"`  // Monit sends services wrapped in <services> element
-	HostGroups  []string     `xml:"hostgroups>name"` // Host groups: <hostgroups><name>...</name></hostgroups>
+	} `xml:"services"` // Monit sends services wrapped in <services> element
+	HostGroups []string `xml:"hostgroups>name"` // Host groups: <hostgroups><name>...</name></hostgroups>
 }
 
 // ToMonitStatus converts MonitStatusXML to the domain MonitStatus struct.
@@ -1074,7 +1102,6 @@ func (msx *MonitStatusXML) ToMonitStatus() *MonitStatus {
 
 	return ms
 }
-
 
 // ParseMonitXML parses Monit XML status data into a MonitStatus struct.
 //
@@ -1095,14 +1122,15 @@ func (msx *MonitStatusXML) ToMonitStatus() *MonitStatus {
 // 4. Return the populated struct or an error
 //
 // Example usage:
-//   xmlData := []byte("<monit>...</monit>")
-//   status, err := ParseMonitXML(xmlData)
-//   if err != nil {
-//       log.Printf("Failed to parse XML: %v", err)
-//       return
-//   }
-//   fmt.Printf("Host: %s\n", status.Server.LocalHostname)
-func ParseMonitXML(data []byte) (*MonitStatus, error) {
+//
+//	xmlData := []byte("<monit>...</monit>")
+//	status, err := ParseMonitXML(xmlData)
+//	if err != nil {
+//	    log.Printf("Failed to parse XML: %v", err)
+//	    return
+//	}
+//	fmt.Printf("Host: %s\n", status.Server.LocalHostname)
+func ParseMonitXML(data []byte, debugEnabled bool) (*MonitStatus, error) {
 	// Handle encoding declaration issue
 	//
 	// Monit sends XML with: <?xml version="1.0" encoding="ISO-8859-1"?>
@@ -1128,8 +1156,9 @@ func ParseMonitXML(data []byte) (*MonitStatus, error) {
 	if len(xmlPreview) > 500 {
 		xmlPreview = xmlPreview[:500]
 	}
-	log.Printf("[DEBUG] Received XML (first 500 bytes): %s", xmlPreview)
-
+	if debugEnabled {
+		log.Printf("[DEBUG] Received XML (first 500 bytes): %s", xmlPreview)
+	}
 	// DEBUG: Save full XML to file for analysis
 	os.WriteFile("/tmp/cmonit-received-xml.xml", data, 0644)
 
@@ -1150,14 +1179,17 @@ func ParseMonitXML(data []byte) (*MonitStatus, error) {
 	}
 
 	// DEBUG: Log how many services were parsed
-	log.Printf("[DEBUG] Proxy unmarshal: parsed %d services from XML", len(statusXML.ServicesWrapper.Services))
-
+	if debugEnabled {
+		log.Printf("[DEBUG] Proxy unmarshal: parsed %d services from XML", len(statusXML.ServicesWrapper.Services))
+	}
 	// PHASE 2: Convert proxy to domain model (MonitStatus)
 	// ToMonitStatus() creates the proper nested structures (File, FileInfo, etc.)
 	// based on service Type field, resolving field conflicts.
 	status := statusXML.ToMonitStatus()
 
-	log.Printf("[DEBUG] After ToMonitStatus conversion: %d services", len(status.Services))
+	if debugEnabled {
+		log.Printf("[DEBUG] After ToMonitStatus conversion: %d services", len(status.Services))
+	}
 
 	return status, nil
 }
@@ -1174,9 +1206,10 @@ func ParseMonitXML(data []byte) (*MonitStatus, error) {
 // It includes date, time, timezone, and can be formatted/compared easily.
 //
 // Example usage:
-//   service := status.Services[0]
-//   timestamp := service.GetCollectedTime()
-//   fmt.Println(timestamp.Format("2006-01-02 15:04:05"))
+//
+//	service := status.Services[0]
+//	timestamp := service.GetCollectedTime()
+//	fmt.Println(timestamp.Format("2006-01-02 15:04:05"))
 func (s *Service) GetCollectedTime() time.Time {
 	// time.Unix() creates a time.Time from a Unix timestamp
 	//
