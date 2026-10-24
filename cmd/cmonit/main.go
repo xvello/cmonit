@@ -17,21 +17,21 @@ import (
 	// Standard library imports
 	// These are packages built into Go - no need to install separately
 
-	"compress/gzip"  // Gzip compression/decompression
-	"database/sql"   // SQL database interface
-	"flag"           // Command-line flag parsing
-	"fmt"            // Formatted I/O - like printf() in C
-	"io"             // I/O operations
-	"log"            // Logging to stderr with timestamps
-	"log/syslog"     // Syslog support for daemon logging
-	"net/http"       // HTTP client and server functionality
-	"os"             // Operating system functions (exit codes, etc.)
-	"os/signal"      // Signal handling for graceful shutdown
-	"path/filepath"  // File path manipulation
-	"strconv"        // String conversion utilities
-	"strings"        // String manipulation
-	"syscall"        // System call interface (for signal constants)
-	"time"           // Time operations and ticker
+	"compress/gzip" // Gzip compression/decompression
+	"database/sql"  // SQL database interface
+	"flag"          // Command-line flag parsing
+	"fmt"           // Formatted I/O - like printf() in C
+	"io"            // I/O operations
+	"log"           // Logging to stderr with timestamps
+	"log/syslog"    // Syslog support for daemon logging
+	"net/http"      // HTTP client and server functionality
+	"os"            // Operating system functions (exit codes, etc.)
+	"os/signal"     // Signal handling for graceful shutdown
+	"path/filepath" // File path manipulation
+	"strconv"       // String conversion utilities
+	"strings"       // String manipulation
+	"syscall"       // System call interface (for signal constants)
+	"time"          // Time operations and ticker
 
 	// External packages
 	"golang.org/x/crypto/bcrypt" // Bcrypt password hashing
@@ -66,7 +66,8 @@ var debugEnabled bool
 // version is the application version number.
 //
 // This variable is set at build time using -ldflags:
-//   go build -ldflags "-X main.version=1.0.0" -o cmonit ./cmd/cmonit
+//
+//	go build -ldflags "-X main.version=1.0.0" -o cmonit ./cmd/cmonit
 //
 // If not set during build, defaults to "dev" (development build).
 var version = "dev"
@@ -685,25 +686,25 @@ func main() {
 	// 2. Queries all hosts from the database
 	// 3. For each host, records their current availability status
 	// 4. Repeats forever
-	go func() {
-		log.Printf("[INFO] Starting availability recording background job")
-
-		// Use a ticker to run every 60 seconds
-		// time.Ticker sends a value on its channel at regular intervals
-		ticker := time.NewTicker(60 * time.Second)
-		defer ticker.Stop()
-
-		for {
-			// Wait for the next tick
-			<-ticker.C
-
-			// Record availability for all hosts
-			err := db.RecordAvailabilityForAllHosts(globalDB)
-			if err != nil {
-				log.Printf("[WARN] Failed to record availability for all hosts: %v", err)
-			}
-		}
-	}()
+	//go func() {
+	//	log.Printf("[INFO] Starting availability recording background job")
+	//
+	//	// Use a ticker to run every 60 seconds
+	//	// time.Ticker sends a value on its channel at regular intervals
+	//	ticker := time.NewTicker(60 * time.Second)
+	//	defer ticker.Stop()
+	//
+	//	for {
+	//		// Wait for the next tick
+	//		<-ticker.C
+	//
+	//		// Record availability for all hosts
+	//		err := db.RecordAvailabilityForAllHosts(globalDB)
+	//		if err != nil {
+	//			log.Printf("[WARN] Failed to record availability for all hosts: %v", err)
+	//		}
+	//	}
+	//}()
 
 	// Start retention pruning background job
 	//
@@ -1263,8 +1264,9 @@ func parseSyslogFacility(facility string) (syslog.Priority, error) {
 // 1. Extract credentials from Authorization header
 // 2. Compare username (always plain text comparison)
 // 3. Compare password based on format:
-//    - plain: Direct string comparison
-//    - bcrypt: Hash the incoming password and compare with stored hash
+//   - plain: Direct string comparison
+//   - bcrypt: Hash the incoming password and compare with stored hash
+//
 // 4. If match: call next handler
 // 5. If no match: return 401 Unauthorized
 //

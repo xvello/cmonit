@@ -217,8 +217,8 @@ func StoreHost(db queryer, server *parser.Server, platform *parser.Platform, sys
 		server.Uptime,
 		server.Poll,
 		now,
-		now,  // created_at for new hosts
-		"",   // description for new hosts (empty)
+		now, // created_at for new hosts
+		"",  // description for new hosts (empty)
 	)
 
 	// Check if the query failed
@@ -264,11 +264,11 @@ func StoreHost(db queryer, server *parser.Server, platform *parser.Platform, sys
 
 	// Record host availability for time-series graphing
 	// This tracks the heartbeat - every successful data reception is recorded
-	err = RecordHostAvailability(db, hostID, now.Unix(), int64(server.Poll))
-	if err != nil {
-		log.Printf("[WARN] Failed to record availability for %s: %v", hostID, err)
-		// Don't fail the whole operation if availability recording fails
-	}
+	//err = RecordHostAvailability(db, hostID, now.Unix(), int64(server.Poll))
+	//if err != nil {
+	//	log.Printf("[WARN] Failed to record availability for %s: %v", hostID, err)
+	//	// Don't fail the whole operation if availability recording fails
+	//}
 
 	// Return nil (no error)
 	return nil
@@ -290,8 +290,9 @@ func StoreHost(db queryer, server *parser.Server, platform *parser.Platform, sys
 //   - error: nil if successful, error if failed
 //
 // Example usage:
-//   StoreEvent(db, "host123", "nginx", 0x20, "Connection failed")
-//   StoreEvent(db, "host123", "webserver", 0x40000, "Monit daemon restarted")
+//
+//	StoreEvent(db, "host123", "nginx", 0x20, "Connection failed")
+//	StoreEvent(db, "host123", "webserver", 0x40000, "Monit daemon restarted")
 func StoreEvent(db queryer, hostID, serviceName string, eventType int, message string) error {
 	const query = `
 		INSERT INTO events (
@@ -334,7 +335,8 @@ func StoreEvent(db queryer, hostID, serviceName string, eventType int, message s
 //   - error: nil if successful, error if failed
 //
 // Example usage:
-//   RecordHostAvailability(db, "host123", time.Now().Unix(), 60)
+//
+//	RecordHostAvailability(db, "host123", time.Now().Unix(), 60)
 func RecordHostAvailability(db queryer, hostID string, timestamp int64, pollInterval int64) error {
 	// Get the last_seen time from the hosts table to check connectivity
 	var lastSeen int64
@@ -608,17 +610,17 @@ func StoreService(db queryer, hostID string, service *parser.Service) error {
 	// Execute the query
 	_, err := db.Exec(
 		query,
-		hostID,              // Which host this service belongs to
-		service.Name,        // Service name (e.g., "nginx", "system", "sshd")
-		service.Type,        // Service type (0-8, see parser.Service docs)
-		service.Status,      // Current status (0=OK, 1=failed, etc.)
-		service.Monitor,     // Monitoring state (0=not monitored, 1=monitored, 2=init)
-		pid,                 // Process ID (for process services)
-		cpuPercent,          // CPU usage % (for process services)
-		memoryPercent,       // Memory usage % (for process services)
-		memoryKB,            // Memory usage in KB (for process services)
-		collectedAt,         // When Monit collected this data
-		now,                 // When we received/processed it
+		hostID,          // Which host this service belongs to
+		service.Name,    // Service name (e.g., "nginx", "system", "sshd")
+		service.Type,    // Service type (0-8, see parser.Service docs)
+		service.Status,  // Current status (0=OK, 1=failed, etc.)
+		service.Monitor, // Monitoring state (0=not monitored, 1=monitored, 2=init)
+		pid,             // Process ID (for process services)
+		cpuPercent,      // CPU usage % (for process services)
+		memoryPercent,   // Memory usage % (for process services)
+		memoryKB,        // Memory usage in KB (for process services)
+		collectedAt,     // When Monit collected this data
+		now,             // When we received/processed it
 	)
 
 	if err != nil {
@@ -652,8 +654,9 @@ func StoreService(db queryer, hostID string, service *parser.Service) error {
 //   - error: nil if successful, error if failed
 //
 // Example usage:
-//   StoreMetric(db, "host123", "system", "cpu", "user", 25.5, time.Now())
-//   StoreMetric(db, "host123", "system", "memory", "percent", 45.2, time.Now())
+//
+//	StoreMetric(db, "host123", "system", "cpu", "user", 25.5, time.Now())
+//	StoreMetric(db, "host123", "system", "memory", "percent", 45.2, time.Now())
 func StoreMetric(db queryer, hostID, serviceName, metricType, metricName string, value float64, collectedAt time.Time) error {
 	// SQL query to insert a metric data point
 	//
@@ -933,6 +936,7 @@ func StoreProcessMetrics(db queryer, hostID string, service *parser.Service) err
 //
 // Returns:
 //   - error: nil if everything stored successfully, error if any part failed
+//
 // StoreHostGroups stores the hostgroups for a given host.
 //
 // This function:
@@ -1644,14 +1648,14 @@ func StoreRemoteHostMetrics(db queryer, hostID string, service *parser.Service) 
 
 // DeleteHostStats contains statistics about what was deleted during host deletion
 type DeleteHostStats struct {
-	Services           int64 // Number of services deleted
-	Metrics            int64 // Number of metrics records deleted
-	FilesystemMetrics  int64 // Number of filesystem metrics deleted
-	NetworkMetrics     int64 // Number of network metrics deleted
-	FileMetrics        int64 // Number of file metrics deleted
-	ProgramMetrics     int64 // Number of program metrics deleted
-	RemoteHostMetrics  int64 // Number of remote host metrics deleted
-	Events             int64 // Number of events deleted
+	Services          int64 // Number of services deleted
+	Metrics           int64 // Number of metrics records deleted
+	FilesystemMetrics int64 // Number of filesystem metrics deleted
+	NetworkMetrics    int64 // Number of network metrics deleted
+	FileMetrics       int64 // Number of file metrics deleted
+	ProgramMetrics    int64 // Number of program metrics deleted
+	RemoteHostMetrics int64 // Number of remote host metrics deleted
+	Events            int64 // Number of events deleted
 }
 
 // DeleteHost removes a host and all associated data from the database.
