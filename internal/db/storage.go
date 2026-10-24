@@ -78,7 +78,9 @@ func StoreHost(db queryer, server *parser.Server, platform *parser.Platform, sys
 		// Generate ID from hostname (use incarnation as suffix to ensure uniqueness)
 		// Example: "webserver-01-1763842004"
 		hostID = fmt.Sprintf("%s-%d", server.LocalHostname, server.Incarnation)
-		log.Printf("[INFO] Generated host ID: %s (no idfile configured in Monit)", hostID)
+		if debugMode {
+			log.Printf("[DEBUG] Generated host ID: %s (no idfile configured in Monit)", hostID)
+		}
 	}
 
 	// Query the previous monit_uptime to detect restarts
@@ -1003,7 +1005,9 @@ func StoreMonitStatus(db *sql.DB, status *parser.MonitStatus) error {
 	hostID := status.Server.ID
 	if hostID == "" {
 		hostID = fmt.Sprintf("%s-%d", status.Server.LocalHostname, status.Server.Incarnation)
-		log.Printf("[INFO] Generated host ID: %s (no idfile configured in Monit)", hostID)
+		if debugMode {
+			log.Printf("[DEBUG] Generated host ID: %s (no idfile configured in Monit)", hostID)
+		}
 	}
 
 	// Step 1: Find the system service (type 5) for uptime/boottime
@@ -1148,8 +1152,10 @@ func StoreMonitStatus(db *sql.DB, status *parser.MonitStatus) error {
 	}
 
 	// Success!
-	log.Printf("[INFO] Stored status for host %s: %d services",
-		status.Server.LocalHostname, len(status.Services))
+	if debugMode {
+		log.Printf("[DEBUG] Stored status for host %s: %d services",
+			status.Server.LocalHostname, len(status.Services))
+	}
 
 	return nil
 }

@@ -1045,8 +1045,10 @@ func handleCollector(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Log what we received for debugging
-	log.Printf("[INFO] Parsed status from %s: %d services",
-		status.Server.LocalHostname, len(status.Services))
+	if debugEnabled {
+		log.Printf("[DEBUG] Parsed status from %s: %d services",
+			status.Server.LocalHostname, len(status.Services))
+	}
 
 	// In debug mode, save the raw XML to /var/log for debugging
 	//
