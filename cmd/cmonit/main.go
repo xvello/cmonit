@@ -478,6 +478,9 @@ func main() {
 
 	// Register collector endpoint (for Monit agents)
 	http.HandleFunc("/collector", handleCollector)
+	http.HandleFunc("/ping", func(writer http.ResponseWriter, request *http.Request) {
+		writer.WriteHeader(200)
+	})
 
 	// Register web UI routes (for human users)
 	//
@@ -489,6 +492,10 @@ func main() {
 	// - Different ports for different purposes (security, firewall rules)
 	// - Easier to add features to one without affecting the other
 	webMux := http.NewServeMux()
+
+	webMux.HandleFunc("/ping", func(writer http.ResponseWriter, request *http.Request) {
+		writer.WriteHeader(200)
+	})
 
 	// Main status overview page (shows all hosts in a table)
 	webMux.HandleFunc("/", web.HandleStatus)
